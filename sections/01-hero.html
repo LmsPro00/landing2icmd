@@ -1,5 +1,7 @@
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,400;0,600;0,700;1,400&display=swap');
 
     .widget-hero, .widget-hero *, .widget-hero *::before, .widget-hero *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -10,14 +12,15 @@
       line-height: 1.7;
       background: #0A0A1A; /* Fallback senza WebGL */
       color: #FFFFFF;
-      overflow-x: hidden;
+      overflow: hidden;
+      position: relative;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
     }
 
     /* Sfondo Animato WebGL */
     .animated-bg {
-      position: fixed;
+      position: absolute;
       top: 0;
       left: 0;
       width: 100%;
@@ -437,12 +440,12 @@
 
   <section class="hero-section">
     <div class="fade-in">
-      <img src="../images/icmdlogo2.png" alt="ICMD Logo" class="hero-logo" style="margin-bottom:24px">
+      <img src="https://raw.githubusercontent.com/LmsPro00/landing2icmd/master/images/icmdlogo2.png" alt="ICMD Logo" class="hero-logo" style="margin-bottom:24px">
     </div>
 
     <div class="fade-in">
       <div class="prime-badge">
-        <img src="../images/Prime-Video-Logo-PNG.png" alt="Prime Video" class="prime-badge-logo">
+        <img src="https://raw.githubusercontent.com/LmsPro00/landing2icmd/master/images/Prime-Video-Logo-PNG.png" alt="Prime Video" class="prime-badge-logo">
         In Esclusiva su Amazon Prime Video
       </div>
     </div>
@@ -453,7 +456,7 @@
 
     <div class="hero-video fade-in">
       <div class="video-wrapper" id="videoWrapper">
-        <img src="../images/film-optin.png" alt="Sblocca Gratis il Film — Sapere è Potere" class="hero-image">
+        <img src="https://raw.githubusercontent.com/LmsPro00/landing2icmd/master/images/film-optin.png" alt="Sblocca Gratis il Film — Sapere è Potere" class="hero-image">
       </div>
     </div>
 
