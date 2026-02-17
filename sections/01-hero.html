@@ -1,496 +1,88 @@
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,400;0,600;0,700;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,400;0,600;0,700;1,400&display=swap');
+@keyframes ctaPulse { 0%, 100% { box-shadow: 0 4px 20px rgba(212,160,23,0.3); } 50% { box-shadow: 0 4px 28px rgba(212,160,23,0.5); } }
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+@media (max-width: 768px) {
+  [data-hero-root] [data-hero-section] { padding: 32px 20px 100px !important; }
+  [data-hero-root] [data-hero-badge] { font-size: 12px !important; }
+  [data-hero-root] [data-hero-sticky] { display: block !important; }
+}
+@media (max-width: 480px) {
+  [data-hero-root] [data-hero-section] { padding: 24px 16px 100px !important; }
+  [data-hero-root] [data-hero-logo] { max-width: 140px !important; }
+  [data-hero-root] [data-hero-headline] { font-size: 28px !important; }
+  [data-hero-root] [data-hero-sub] { font-size: 15px !important; }
+  [data-hero-root] [data-hero-img] { border-radius: 16px !important; box-shadow: 0 8px 30px rgba(0,0,0,0.4) !important; }
+  [data-hero-root] [data-hero-cta] { font-size: 16px !important; padding: 16px 32px !important; }
+  [data-hero-root] [data-hero-modal] { padding: 36px 20px 24px !important; border-radius: 16px !important; }
+  [data-hero-root] [data-hero-modal-title] { font-size: 18px !important; }
+}
+@media (max-width: 1024px) {
+  [data-hero-root] [data-hero-3d] { perspective: none !important; }
+  [data-hero-root] [data-hero-3d-inner] { transform-style: flat !important; transform: none !important; }
+  [data-hero-root] [data-hero-img] { border-radius: 20px !important; }
+}
+#hubspotFormContainer { min-height: 100px; }
+#hubspotFormContainer label { color: rgba(255,255,255,0.85) !important; font-size: 14px !important; }
+#hubspotFormContainer .hs-input { background: rgba(255,255,255,0.08) !important; border: 1px solid rgba(255,255,255,0.15) !important; color: #FFFFFF !important; border-radius: 10px !important; padding: 12px 14px !important; font-size: 15px !important; font-family: 'Inter Tight', sans-serif !important; width: 100% !important; }
+#hubspotFormContainer .hs-input:focus { border-color: rgba(212,160,23,0.5) !important; outline: none !important; box-shadow: 0 0 0 2px rgba(212,160,23,0.15) !important; }
+#hubspotFormContainer .hs-input::placeholder { color: rgba(255,255,255,0.35) !important; }
+#hubspotFormContainer select.hs-input { appearance: auto !important; -webkit-appearance: auto !important; }
+#hubspotFormContainer .hs-submit .hs-button { background: linear-gradient(135deg, #D4A017, #F5C518) !important; color: #0A0A1A !important; font-family: 'Inter Tight', sans-serif !important; font-size: 16px !important; font-weight: 700 !important; padding: 14px 32px !important; border: none !important; border-radius: 12px !important; cursor: pointer !important; width: 100% !important; }
+#hubspotFormContainer .hs-error-msgs { color: #FF5252 !important; font-size: 13px !important; margin-top: 4px !important; }
+#hubspotFormContainer .hs-error-msgs li label { color: #FF5252 !important; }
+#hubspotFormContainer .hs-form-field { margin-bottom: 18px !important; }
+#hubspotFormContainer .legal-consent-container, #hubspotFormContainer .legal-consent-container p, #hubspotFormContainer .legal-consent-container span { color: rgba(255,255,255,0.5) !important; font-size: 12px !important; }
+#hubspotFormContainer a { color: #F5C518 !important; }
+#hubspotFormContainer .submitted-message { color: #FFFFFF !important; font-size: 16px !important; text-align: center !important; }
+</style>
 
-    .widget-hero *, .widget-hero *::before, .widget-hero *::after { box-sizing: border-box; }
+<div data-hero-root style="font-family: 'Inter Tight', sans-serif; font-weight: 400; font-size: 17px; line-height: 1.7; background: #0A0A1A; color: #FFFFFF; overflow: hidden; position: relative; -webkit-font-smoothing: antialiased;">
 
-    .widget-hero {
-      font-family: 'Inter Tight', sans-serif;
-      font-weight: 400;
-      font-size: 17px;
-      line-height: 1.7;
-      background: #0A0A1A; /* Fallback senza WebGL */
-      color: #FFFFFF;
-      overflow: hidden;
-      position: relative;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-    }
+  <div id="animatedBg" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none;"></div>
 
-    /* Sfondo Animato WebGL */
-    .animated-bg {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 0;
-      pointer-events: none;
-    }
+  <div data-hero-section style="position: relative; z-index: 1; max-width: 880px; margin: 0 auto; padding: 48px 32px 64px; display: flex; flex-direction: column; align-items: center; text-align: center;">
 
-    .animated-bg canvas {
-      pointer-events: none;
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-    }
-
-    .hero-section {
-      position: relative;
-      z-index: 1;
-      max-width: 880px;
-      margin: 0 auto;
-      padding: 48px 32px 64px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-    }
-
-    .hero-logo {
-      max-width: 180px;
-      height: auto;
-    }
-
-    .prime-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(212,160,23,0.1);
-      border: 1px solid rgba(212,160,23,0.3);
-      border-radius: 50px;
-      padding: 6px 18px;
-      font-size: 13px;
-      font-weight: 600;
-      color: #F5C518;
-      width: fit-content;
-    }
-
-    .prime-badge-logo {
-      height: 16px;
-      width: auto;
-      flex-shrink: 0;
-      object-fit: contain;
-    }
-
-    .hero-headline {
-      font-size: clamp(32px, 5vw, 52px);
-      font-weight: 700;
-      line-height: 1.1;
-      color: #FFFFFF;
-    }
-
-    .hero-subheadline {
-      font-size: clamp(16px, 2vw, 19px);
-      color: rgba(255,255,255,0.7);
-      line-height: 1.6;
-    }
-
-    .hero-subheadline strong {
-      color: #FFFFFF;
-    }
-
-    .cta-wrapper {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0;
-    }
-
-    .cta-btn {
-      display: inline-block;
-      background: linear-gradient(135deg, #D4A017, #F5C518);
-      color: #0A0A1A;
-      font-family: 'Inter Tight', sans-serif;
-      font-size: 18px;
-      font-weight: 700;
-      padding: 18px 44px;
-      border-radius: 14px;
-      text-decoration: none;
-      box-shadow: 0 4px 20px rgba(212,160,23,0.3);
-      transition: transform 0.2s, box-shadow 0.2s;
-      animation: ctaPulse 3s ease-in-out infinite;
-      cursor: pointer;
-      border: none;
-      text-align: center;
-    }
-
-    .cta-btn:hover {
-      transform: translateY(-2px) scale(1.02);
-      box-shadow: 0 8px 32px rgba(212,160,23,0.45);
-    }
-
-    @keyframes ctaPulse {
-      0%, 100% { box-shadow: 0 4px 20px rgba(212,160,23,0.3); }
-      50% { box-shadow: 0 4px 28px rgba(212,160,23,0.5); }
-    }
-
-    .cta-sub {
-      margin-top: 14px;
-      font-size: 13px;
-      color: rgba(255,255,255,0.5);
-    }
-
-    .cta-sub strong {
-      background: linear-gradient(90deg, #D4A017, #F5C518);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    /* Container 3D */
-    .hero-video {
-      position: relative;
-      perspective: 1500px;
-      width: 100%;
-      max-width: 680px;
-      margin: 32px auto;
-    }
-
-    .video-wrapper {
-      position: relative;
-      width: 100%;
-      transform-style: preserve-3d;
-      transition: transform 0.1s ease-out;
-      will-change: transform;
-    }
-
-    .hero-image {
-      width: 100%;
-      border-radius: 24px;
-      box-shadow:
-        0 20px 60px rgba(0,0,0,0.5),
-        0 0 0 1px rgba(255,255,255,0.1);
-      display: block;
-      transition: box-shadow 0.3s ease;
-    }
-
-    .video-wrapper:hover .hero-image {
-      box-shadow:
-        0 30px 80px rgba(0,0,0,0.6),
-        0 0 0 1px rgba(255,255,255,0.15),
-        0 0 40px rgba(212,160,23,0.08);
-    }
-
-    /* Sticky Mobile CTA */
-    .sticky-cta {
-      display: none;
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      z-index: 999;
-      padding: 12px 16px;
-      background: rgba(10,10,26,0.85);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border-top: 1px solid rgba(255,255,255,0.06);
-    }
-
-    .sticky-cta .cta-btn {
-      width: 100%;
-      text-align: center;
-      font-size: 16px;
-      padding: 16px 24px;
-    }
-
-    /* Popup Modal */
-    .form-modal-overlay {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.75);
-      z-index: 10000;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-    }
-
-    .form-modal-overlay.active {
-      display: flex;
-    }
-
-    .form-modal {
-      position: relative;
-      background: #0F0F24;
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 20px;
-      padding: 40px 32px 32px;
-      max-width: 520px;
-      width: 100%;
-      max-height: 90vh;
-      overflow-y: auto;
-      box-shadow: 0 24px 80px rgba(0,0,0,0.6);
-    }
-
-    .form-modal-close {
-      position: absolute;
-      top: 14px;
-      right: 14px;
-      width: 36px;
-      height: 36px;
-      border: none;
-      background: rgba(255,255,255,0.06);
-      border-radius: 50%;
-      color: rgba(255,255,255,0.6);
-      font-size: 20px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background 0.2s, color 0.2s;
-    }
-
-    .form-modal-close:hover {
-      background: rgba(255,255,255,0.12);
-      color: #FFFFFF;
-    }
-
-    .form-modal-title {
-      font-size: 20px;
-      font-weight: 700;
-      color: #FFFFFF;
-      text-align: center;
-      margin-bottom: 24px;
-      line-height: 1.4;
-    }
-
-    .form-modal-title span {
-      background: linear-gradient(90deg, #D4A017, #F5C518);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    #hubspotFormContainer {
-      min-height: 100px;
-    }
-
-    /* HubSpot Form Overrides per sfondo scuro */
-    #hubspotFormContainer label {
-      color: rgba(255,255,255,0.85) !important;
-      font-size: 14px !important;
-    }
-
-    #hubspotFormContainer .hs-input {
-      background: rgba(255,255,255,0.08) !important;
-      border: 1px solid rgba(255,255,255,0.15) !important;
-      color: #FFFFFF !important;
-      border-radius: 10px !important;
-      padding: 12px 14px !important;
-      font-size: 15px !important;
-      font-family: 'Inter Tight', sans-serif !important;
-      width: 100% !important;
-    }
-
-    #hubspotFormContainer .hs-input:focus {
-      border-color: rgba(212,160,23,0.5) !important;
-      outline: none !important;
-      box-shadow: 0 0 0 2px rgba(212,160,23,0.15) !important;
-    }
-
-    #hubspotFormContainer .hs-input::placeholder {
-      color: rgba(255,255,255,0.35) !important;
-    }
-
-    #hubspotFormContainer select.hs-input {
-      appearance: auto !important;
-      -webkit-appearance: auto !important;
-    }
-
-    #hubspotFormContainer .hs-submit .hs-button {
-      background: linear-gradient(135deg, #D4A017, #F5C518) !important;
-      color: #0A0A1A !important;
-      font-family: 'Inter Tight', sans-serif !important;
-      font-size: 16px !important;
-      font-weight: 700 !important;
-      padding: 14px 32px !important;
-      border: none !important;
-      border-radius: 12px !important;
-      cursor: pointer !important;
-      width: 100% !important;
-      transition: transform 0.2s, box-shadow 0.2s !important;
-    }
-
-    #hubspotFormContainer .hs-submit .hs-button:hover {
-      transform: translateY(-1px) !important;
-      box-shadow: 0 6px 24px rgba(212,160,23,0.4) !important;
-    }
-
-    #hubspotFormContainer .hs-error-msgs {
-      color: #FF5252 !important;
-      font-size: 13px !important;
-      margin-top: 4px !important;
-    }
-
-    #hubspotFormContainer .hs-error-msgs li label {
-      color: #FF5252 !important;
-    }
-
-    #hubspotFormContainer .hs-form-field {
-      margin-bottom: 18px !important;
-    }
-
-    #hubspotFormContainer .legal-consent-container,
-    #hubspotFormContainer .legal-consent-container p,
-    #hubspotFormContainer .legal-consent-container span {
-      color: rgba(255,255,255,0.5) !important;
-      font-size: 12px !important;
-    }
-
-    #hubspotFormContainer a {
-      color: #F5C518 !important;
-    }
-
-    #hubspotFormContainer .submitted-message {
-      color: #FFFFFF !important;
-      font-size: 16px !important;
-      text-align: center !important;
-    }
-
-    @media (max-width: 480px) {
-      .form-modal {
-        padding: 36px 20px 24px;
-        border-radius: 16px;
-      }
-
-      .form-modal-title {
-        font-size: 18px;
-      }
-    }
-
-    /* Fade-in */
-    .fade-in {
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.6s ease, transform 0.6s ease;
-    }
-    .fade-in.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    /* Responsive — 3D disable */
-    @media (max-width: 1024px) {
-      .hero-video {
-        perspective: none;
-      }
-      .video-wrapper {
-        transform-style: flat;
-        transform: none !important;
-      }
-      .hero-image {
-        border-radius: 20px;
-      }
-    }
-
-    @media (max-width: 768px) {
-      .hero-section {
-        padding: 32px 20px 100px;
-      }
-
-      .prime-badge {
-        font-size: 12px;
-      }
-
-      .sticky-cta {
-        display: block;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .hero-section {
-        padding: 24px 16px 100px;
-      }
-
-      .hero-logo {
-        max-width: 140px;
-      }
-
-      .hero-headline {
-        font-size: 28px;
-      }
-
-      .hero-subheadline {
-        font-size: 15px;
-      }
-
-      .hero-image {
-        border-radius: 16px;
-        box-shadow: 0 8px 30px rgba(0,0,0,0.4);
-      }
-
-      .cta-btn {
-        font-size: 16px;
-        padding: 16px 32px;
-      }
-    }
-  </style>
-
-<div class="widget-hero">
-
-  <!-- Sfondo Animato -->
-  <div class="animated-bg" id="animatedBg"></div>
-
-  <section class="hero-section">
-    <div class="fade-in">
-      <img src="https://raw.githubusercontent.com/LmsPro00/landing2icmd/master/images/icmdlogo2.png" alt="ICMD Logo" class="hero-logo" style="margin-bottom:24px">
+    <div style="animation: fadeInUp 0.6s ease forwards; animation-delay: 0s;">
+      <img data-hero-logo src="https://raw.githubusercontent.com/LmsPro00/landing2icmd/master/images/icmdlogo2.png" alt="ICMD Logo" style="max-width: 180px; height: auto; margin-bottom: 24px; display: block;">
     </div>
 
-    <div class="fade-in">
-      <div class="prime-badge">
-        <img src="https://raw.githubusercontent.com/LmsPro00/landing2icmd/master/images/Prime-Video-Logo-PNG.png" alt="Prime Video" class="prime-badge-logo">
+    <div style="animation: fadeInUp 0.6s ease forwards; animation-delay: 0.08s; opacity: 0;">
+      <div data-hero-badge style="display: inline-flex; align-items: center; gap: 8px; background: rgba(212,160,23,0.1); border: 1px solid rgba(212,160,23,0.3); border-radius: 50px; padding: 6px 18px; font-size: 13px; font-weight: 600; color: #F5C518;">
+        <img src="https://raw.githubusercontent.com/LmsPro00/landing2icmd/master/images/Prime-Video-Logo-PNG.png" alt="Prime Video" style="height: 16px; width: auto; flex-shrink: 0; object-fit: contain;">
         In Esclusiva su Amazon Prime Video
       </div>
     </div>
 
-    <h1 class="hero-headline fade-in" style="margin-top:20px">Da Impiegato McDonald a Imprenditore Seriale in Italia</h1>
+    <h1 data-hero-headline style="font-family: 'Inter Tight', sans-serif; font-size: clamp(32px, 5vw, 52px); font-weight: 700; line-height: 1.1; color: #FFFFFF; margin: 20px 0 0 0; animation: fadeInUp 0.6s ease forwards; animation-delay: 0.16s; opacity: 0;">Da Impiegato McDonald a Imprenditore Seriale in Italia</h1>
 
-    <p class="hero-subheadline fade-in" style="margin-top:16px">Guarda Gratis <strong>"Sapere è Potere"</strong> — il Primo Film Italiano di Crescita Personale sulla vita di Leonardo Leone</p>
+    <p data-hero-sub style="font-family: 'Inter Tight', sans-serif; font-size: clamp(16px, 2vw, 19px); color: rgba(255,255,255,0.7); line-height: 1.6; margin: 16px 0 0 0; animation: fadeInUp 0.6s ease forwards; animation-delay: 0.24s; opacity: 0;">Guarda Gratis <strong style="color: #FFFFFF;">"Sapere è Potere"</strong> — il Primo Film Italiano di Crescita Personale sulla vita di Leonardo Leone</p>
 
-    <div class="hero-video fade-in">
-      <div class="video-wrapper" id="videoWrapper">
-        <img src="https://raw.githubusercontent.com/LmsPro00/landing2icmd/master/images/film-optin.png" alt="Sblocca Gratis il Film — Sapere è Potere" class="hero-image">
+    <div data-hero-3d style="position: relative; perspective: 1500px; width: 100%; max-width: 680px; margin: 32px auto; animation: fadeInUp 0.6s ease forwards; animation-delay: 0.32s; opacity: 0;">
+      <div data-hero-3d-inner id="videoWrapper" style="position: relative; width: 100%; transform-style: preserve-3d; transition: transform 0.1s ease-out; will-change: transform;">
+        <img data-hero-img src="https://raw.githubusercontent.com/LmsPro00/landing2icmd/master/images/film-optin.png" alt="Sblocca Gratis il Film — Sapere è Potere" style="width: 100%; border-radius: 24px; box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.1); display: block; transition: box-shadow 0.3s ease;">
       </div>
     </div>
 
-    <div class="cta-wrapper fade-in">
-      <a href="javascript:void(0)" onclick="openFormModal()" class="cta-btn">Sbloccalo Gratis</a>
-      <div class="cta-sub">
-        <strong>67 Visioni Gratuite Rimaste</strong>
+    <div style="display: flex; flex-direction: column; align-items: center; animation: fadeInUp 0.6s ease forwards; animation-delay: 0.4s; opacity: 0;">
+      <a data-hero-cta href="javascript:void(0)" onclick="openFormModal()" style="display: inline-block; background: linear-gradient(135deg, #D4A017, #F5C518); color: #0A0A1A; font-family: 'Inter Tight', sans-serif; font-size: 18px; font-weight: 700; padding: 18px 44px; border-radius: 14px; text-decoration: none; box-shadow: 0 4px 20px rgba(212,160,23,0.3); cursor: pointer; border: none; text-align: center; animation: ctaPulse 3s ease-in-out infinite;">Sbloccalo Gratis</a>
+      <div style="margin-top: 14px; font-size: 13px; color: rgba(255,255,255,0.5);">
+        <strong style="background: linear-gradient(90deg, #D4A017, #F5C518); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">67 Visioni Gratuite Rimaste</strong>
       </div>
     </div>
-  </section>
 
-  <!-- Sticky Mobile CTA -->
-  <div class="sticky-cta">
-    <a href="javascript:void(0)" onclick="openFormModal()" class="cta-btn">Sbloccalo Gratis</a>
   </div>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      var observer = new IntersectionObserver(function(entries) {
-        entries.forEach(function(entry) {
-          if (entry.isIntersecting) { entry.target.classList.add('visible'); }
-        });
-      }, { threshold: 0.1 });
-      var els = document.querySelectorAll('.fade-in');
-      els.forEach(function(el, i) {
-        el.style.transitionDelay = (i * 0.08) + 's';
-        observer.observe(el);
-      });
-    });
-  </script>
+  <!-- Sticky Mobile CTA -->
+  <div data-hero-sticky style="display: none; position: fixed; bottom: 0; left: 0; right: 0; z-index: 999; padding: 12px 16px; background: rgba(10,10,26,0.85); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-top: 1px solid rgba(255,255,255,0.06);">
+    <a data-hero-cta href="javascript:void(0)" onclick="openFormModal()" style="display: block; background: linear-gradient(135deg, #D4A017, #F5C518); color: #0A0A1A; font-family: 'Inter Tight', sans-serif; font-size: 16px; font-weight: 700; padding: 16px 24px; border-radius: 14px; text-decoration: none; box-shadow: 0 4px 20px rgba(212,160,23,0.3); cursor: pointer; border: none; text-align: center; width: 100%;">Sbloccalo Gratis</a>
+  </div>
 
   <!-- Popup Modal HubSpot -->
-  <div class="form-modal-overlay" id="formModalOverlay">
-    <div class="form-modal">
-      <button class="form-modal-close" onclick="closeFormModal()">&times;</button>
-      <div class="form-modal-title">Compila il modulo per sbloccare <span>gratis</span> il Film</div>
+  <div id="formModalOverlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); z-index: 10000; align-items: center; justify-content: center; padding: 24px;">
+    <div data-hero-modal style="position: relative; background: #0F0F24; border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 40px 32px 32px; max-width: 520px; width: 100%; max-height: 90vh; overflow-y: auto; box-shadow: 0 24px 80px rgba(0,0,0,0.6);">
+      <button onclick="closeFormModal()" style="position: absolute; top: 14px; right: 14px; width: 36px; height: 36px; border: none; background: rgba(255,255,255,0.06); border-radius: 50%; color: rgba(255,255,255,0.6); font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center;">&times;</button>
+      <div data-hero-modal-title style="font-family: 'Inter Tight', sans-serif; font-size: 20px; font-weight: 700; color: #FFFFFF; text-align: center; margin-bottom: 24px; line-height: 1.4;">Compila il modulo per sbloccare <span style="background: linear-gradient(90deg, #D4A017, #F5C518); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">gratis</span> il Film</div>
       <div id="hubspotFormContainer"></div>
     </div>
   </div>
@@ -499,41 +91,28 @@
   <script>
     var hsFormLoaded = false;
     function openFormModal() {
-      document.getElementById('formModalOverlay').classList.add('active');
+      var o = document.getElementById('formModalOverlay');
+      o.style.display = 'flex';
       document.body.style.overflow = 'hidden';
       if (!hsFormLoaded && typeof hbspt !== 'undefined') {
-        hbspt.forms.create({
-          portalId: "140603915",
-          formId: "09823da4-443d-47e0-8ed5-2e0ba9fc68f9",
-          region: "eu1",
-          target: "#hubspotFormContainer"
-        });
+        hbspt.forms.create({ portalId: "140603915", formId: "09823da4-443d-47e0-8ed5-2e0ba9fc68f9", region: "eu1", target: "#hubspotFormContainer" });
         hsFormLoaded = true;
       } else if (!hsFormLoaded) {
         var checkHs = setInterval(function() {
           if (typeof hbspt !== 'undefined') {
             clearInterval(checkHs);
-            hbspt.forms.create({
-              portalId: "140603915",
-              formId: "09823da4-443d-47e0-8ed5-2e0ba9fc68f9",
-              region: "eu1",
-              target: "#hubspotFormContainer"
-            });
+            hbspt.forms.create({ portalId: "140603915", formId: "09823da4-443d-47e0-8ed5-2e0ba9fc68f9", region: "eu1", target: "#hubspotFormContainer" });
             hsFormLoaded = true;
           }
         }, 200);
       }
     }
     function closeFormModal() {
-      document.getElementById('formModalOverlay').classList.remove('active');
+      document.getElementById('formModalOverlay').style.display = 'none';
       document.body.style.overflow = '';
     }
-    document.getElementById('formModalOverlay').addEventListener('click', function(e) {
-      if (e.target === this) closeFormModal();
-    });
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'Escape') closeFormModal();
-    });
+    document.getElementById('formModalOverlay').addEventListener('click', function(e) { if (e.target === this) closeFormModal(); });
+    document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeFormModal(); });
   </script>
 
   <!-- Effetto 3D Mouse -->
@@ -541,63 +120,23 @@
     document.addEventListener('DOMContentLoaded', function() {
       var videoWrapper = document.getElementById('videoWrapper');
       if (!videoWrapper) return;
-
-      // Disabilita su mobile/tablet (< 1024px)
       if (window.innerWidth < 1024) return;
-
-      var maxRotation = 12;
-      var smoothness = 0.08;
-      var currentX = 0;
-      var currentY = 0;
-      var targetX = 0;
-      var targetY = 0;
-      var animating = false;
-
+      var maxRotation = 12, smoothness = 0.08, currentX = 0, currentY = 0, targetX = 0, targetY = 0, animating = false;
       videoWrapper.addEventListener('mousemove', function(e) {
         var rect = videoWrapper.getBoundingClientRect();
-        var x = e.clientX - rect.left;
-        var y = e.clientY - rect.top;
-
-        var normalizedX = (x / rect.width) * 2 - 1;
-        var normalizedY = (y / rect.height) * 2 - 1;
-
-        targetX = normalizedY * maxRotation * -1;
-        targetY = normalizedX * maxRotation;
-
-        if (!animating) {
-          animating = true;
-          animate();
-        }
+        var normalizedX = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+        var normalizedY = ((e.clientY - rect.top) / rect.height) * 2 - 1;
+        targetX = normalizedY * maxRotation * -1; targetY = normalizedX * maxRotation;
+        if (!animating) { animating = true; animate(); }
       });
-
-      videoWrapper.addEventListener('mouseleave', function() {
-        targetX = 0;
-        targetY = 0;
-      });
-
+      videoWrapper.addEventListener('mouseleave', function() { targetX = 0; targetY = 0; });
       function animate() {
-        currentX += (targetX - currentX) * smoothness;
-        currentY += (targetY - currentY) * smoothness;
-
-        videoWrapper.style.transform =
-          'rotateX(' + currentX + 'deg) rotateY(' + currentY + 'deg) scale(1.02)';
-
-        if (Math.abs(targetX - currentX) > 0.01 || Math.abs(targetY - currentY) > 0.01) {
-          requestAnimationFrame(animate);
-        } else {
-          animating = false;
-          if (targetX === 0 && targetY === 0) {
-            videoWrapper.style.transform = 'rotateX(0deg) rotateY(0deg) scale(1)';
-          }
-        }
+        currentX += (targetX - currentX) * smoothness; currentY += (targetY - currentY) * smoothness;
+        videoWrapper.style.transform = 'rotateX(' + currentX + 'deg) rotateY(' + currentY + 'deg) scale(1.02)';
+        if (Math.abs(targetX - currentX) > 0.01 || Math.abs(targetY - currentY) > 0.01) { requestAnimationFrame(animate); }
+        else { animating = false; if (targetX === 0 && targetY === 0) { videoWrapper.style.transform = 'rotateX(0deg) rotateY(0deg) scale(1)'; } }
       }
-
-      // Re-check su resize
-      window.addEventListener('resize', function() {
-        if (window.innerWidth < 1024) {
-          videoWrapper.style.transform = 'none';
-        }
-      });
+      window.addEventListener('resize', function() { if (window.innerWidth < 1024) { videoWrapper.style.transform = 'none'; } });
     });
   </script>
 
@@ -605,100 +144,31 @@
   <script>
     (function() {
       var vShader = 'attribute vec2 position;varying vec2 vUv;void main(){vUv=position*0.5+0.5;gl_Position=vec4(position,0.0,1.0);}';
-
-      var fShader = [
-        'precision highp float;',
-        'uniform float uTime;',
-        'uniform vec2 uResolution;',
-        'varying vec2 vUv;',
-        'void main(){',
-        '  float mr=min(uResolution.x,uResolution.y);',
-        '  vec2 uv=(vUv*2.0-1.0)*uResolution/mr;',
-        '  float d=-uTime*0.5;',
-        '  float a=0.0;',
-        '  for(float i=0.0;i<8.0;++i){',
-        '    a+=cos(i-d-a*uv.x);',
-        '    d+=sin(uv.y*i+a);',
-        '  }',
-        '  d+=uTime*0.5;',
-        '  float p1=cos(uv.x*d)*0.5+0.5;',
-        '  float p2=cos(uv.y*a)*0.5+0.5;',
-        '  vec3 base=vec3(0.039,0.039,0.102);',
-        '  vec3 accent1=vec3(0.059,0.059,0.141);',
-        '  vec3 accent2=vec3(0.831,0.627,0.090);',
-        '  vec3 col=base + (accent1-base)*(p1*0.6) + accent2*(p2*0.03);',
-        '  gl_FragColor=vec4(col,1.0);',
-        '}'
-      ].join('\n');
-
+      var fShader = ['precision highp float;','uniform float uTime;','uniform vec2 uResolution;','varying vec2 vUv;','void main(){','  float mr=min(uResolution.x,uResolution.y);','  vec2 uv=(vUv*2.0-1.0)*uResolution/mr;','  float d=-uTime*0.5;','  float a=0.0;','  for(float i=0.0;i<8.0;++i){','    a+=cos(i-d-a*uv.x);','    d+=sin(uv.y*i+a);','  }','  d+=uTime*0.5;','  float p1=cos(uv.x*d)*0.5+0.5;','  float p2=cos(uv.y*a)*0.5+0.5;','  vec3 base=vec3(0.039,0.039,0.102);','  vec3 accent1=vec3(0.059,0.059,0.141);','  vec3 accent2=vec3(0.831,0.627,0.090);','  vec3 col=base + (accent1-base)*(p1*0.6) + accent2*(p2*0.03);','  gl_FragColor=vec4(col,1.0);','}'].join('\n');
       function initBg() {
         var container = document.getElementById('animatedBg');
         if (!container) return;
-
-        if (window.innerWidth < 768) {
-          container.style.background = '#0A0A1A';
-          return;
-        }
-
+        if (window.innerWidth < 768) { container.style.background = '#0A0A1A'; return; }
         var canvas = document.createElement('canvas');
         canvas.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none';
         container.appendChild(canvas);
-
         var gl = canvas.getContext('webgl');
-        if (!gl) {
-          container.style.background = '#0A0A1A';
-          return;
-        }
-
-        function createShader(type, source) {
-          var shader = gl.createShader(type);
-          gl.shaderSource(shader, source);
-          gl.compileShader(shader);
-          return shader;
-        }
-
+        if (!gl) { container.style.background = '#0A0A1A'; return; }
+        function createShader(type, source) { var s = gl.createShader(type); gl.shaderSource(s, source); gl.compileShader(s); return s; }
         var program = gl.createProgram();
         gl.attachShader(program, createShader(gl.VERTEX_SHADER, vShader));
         gl.attachShader(program, createShader(gl.FRAGMENT_SHADER, fShader));
-        gl.linkProgram(program);
-        gl.useProgram(program);
-
+        gl.linkProgram(program); gl.useProgram(program);
         var vertices = new Float32Array([-1,-1,1,-1,-1,1,-1,1,1,-1,1,1]);
-        var buffer = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-        gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
-
-        var pos = gl.getAttribLocation(program, 'position');
-        gl.enableVertexAttribArray(pos);
-        gl.vertexAttribPointer(pos, 2, gl.FLOAT, false, 0, 0);
-
-        var uTime = gl.getUniformLocation(program, 'uTime');
-        var uRes = gl.getUniformLocation(program, 'uResolution');
-
-        function resize() {
-          var dpr = Math.min(window.devicePixelRatio || 1, 2);
-          canvas.width = container.offsetWidth * dpr;
-          canvas.height = container.offsetHeight * dpr;
-          gl.viewport(0, 0, canvas.width, canvas.height);
-          gl.uniform2f(uRes, canvas.width, canvas.height);
-        }
-
-        window.addEventListener('resize', resize);
-        resize();
-
-        function animate(t) {
-          gl.uniform1f(uTime, t * 0.001);
-          gl.drawArrays(gl.TRIANGLES, 0, 6);
-          requestAnimationFrame(animate);
-        }
+        var buffer = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buffer); gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
+        var pos = gl.getAttribLocation(program, 'position'); gl.enableVertexAttribArray(pos); gl.vertexAttribPointer(pos, 2, gl.FLOAT, false, 0, 0);
+        var uTime = gl.getUniformLocation(program, 'uTime'), uRes = gl.getUniformLocation(program, 'uResolution');
+        function resize() { var dpr = Math.min(window.devicePixelRatio || 1, 2); canvas.width = container.offsetWidth * dpr; canvas.height = container.offsetHeight * dpr; gl.viewport(0, 0, canvas.width, canvas.height); gl.uniform2f(uRes, canvas.width, canvas.height); }
+        window.addEventListener('resize', resize); resize();
+        function animate(t) { gl.uniform1f(uTime, t * 0.001); gl.drawArrays(gl.TRIANGLES, 0, 6); requestAnimationFrame(animate); }
         animate(0);
       }
-
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initBg);
-      } else {
-        setTimeout(initBg, 100);
-      }
+      if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initBg); } else { setTimeout(initBg, 100); }
     })();
   </script>
 

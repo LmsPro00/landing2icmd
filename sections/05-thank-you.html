@@ -1,613 +1,148 @@
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,400;0,600;0,700;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,400;0,600;0,700;1,400&display=swap');
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+@media (max-width: 768px) {
+  [data-ty-root] [data-ty-section] { padding: 48px 20px 64px !important; }
+  [data-ty-root] [data-ty-card] { padding: 24px !important; }
+  [data-ty-root] [data-ty-gold] { padding: 24px !important; }
+}
+@media (max-width: 480px) {
+  [data-ty-root] [data-ty-section] { padding: 32px 16px 48px !important; }
+  [data-ty-root] [data-ty-title] { font-size: 22px !important; }
+  [data-ty-root] [data-ty-card] { padding: 20px !important; border-radius: 16px !important; }
+  [data-ty-root] [data-ty-gold] { padding: 20px !important; border-radius: 16px !important; }
+  [data-ty-root] [data-ty-exercise] { font-size: 17px !important; }
+  [data-ty-root] [data-ty-warn] { padding: 20px !important; }
+}
+</style>
 
-    .widget-thankyou *, .widget-thankyou *::before, .widget-thankyou *::after { box-sizing: border-box; }
+<div data-ty-root style="font-family: 'Inter Tight', sans-serif; font-weight: 400; font-size: 17px; line-height: 1.7; background: #0A0A1A; color: #FFFFFF; overflow: hidden; position: relative; -webkit-font-smoothing: antialiased;">
 
-    .widget-thankyou {
-      font-family: 'Inter Tight', sans-serif;
-      font-weight: 400;
-      font-size: 17px;
-      line-height: 1.7;
-      background: #0A0A1A; /* Fallback senza WebGL */
-      color: #FFFFFF;
-      overflow: hidden;
-      position: relative;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-    }
+  <div id="animatedBg" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none;"></div>
 
-    /* Sfondo Animato WebGL */
-    .animated-bg {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 0;
-      pointer-events: none;
-    }
-
-    .animated-bg canvas {
-      pointer-events: none;
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-    }
-
-    .ty-section {
-      position: relative;
-      z-index: 1;
-      max-width: 700px;
-      margin: 0 auto;
-      padding: 64px 32px 80px;
-    }
-
-    /* Header */
-    .ty-header {
-      text-align: center;
-      margin-bottom: 40px;
-    }
-
-    .ty-icon {
-      width: 64px;
-      height: 64px;
-      margin: 0 auto 20px;
-      background: rgba(212,160,23,0.1);
-      border: 1px solid rgba(212,160,23,0.3);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .ty-icon svg {
-      width: 32px;
-      height: 32px;
-      fill: #F5C518;
-    }
-
-    .ty-badge {
-      display: inline-block;
-      font-size: 13px;
-      font-weight: 700;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      background: linear-gradient(90deg, #D4A017, #F5C518);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      margin-bottom: 12px;
-    }
-
-    .ty-title {
-      font-size: clamp(22px, 3.5vw, 32px);
-      font-weight: 700;
-      line-height: 1.2;
-      color: #FFFFFF;
-    }
-
-    .ty-title .check {
-      color: #4CAF50;
-      -webkit-text-fill-color: #4CAF50;
-    }
-
-    /* Cards */
-    .ty-card {
-      background: rgba(255,255,255,0.025);
-      border: 1px solid rgba(255,255,255,0.06);
-      border-radius: 20px;
-      padding: 32px;
-      margin-bottom: 24px;
-      transition: border-color 0.3s ease, transform 0.3s ease;
-    }
-
-    .ty-card:hover {
-      border-color: rgba(255,255,255,0.12);
-      transform: translateY(-2px);
-    }
-
-    .ty-card-title {
-      font-size: 18px;
-      font-weight: 700;
-      margin-bottom: 16px;
-      color: #FFFFFF;
-    }
-
-    .ty-card p {
-      color: rgba(255,255,255,0.7);
-      margin-bottom: 8px;
-    }
-
-    .ty-card p:last-child {
-      margin-bottom: 0;
-    }
-
-    /* Info Card */
-    .info-card {
-      text-align: center;
-    }
-
-    .info-card p {
-      font-size: 16px;
-    }
-
-    /* Contact list */
-    .contact-list {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      margin-top: 16px;
-    }
-
-    .contact-list li {
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      color: rgba(255,255,255,0.7);
-      font-size: 16px;
-    }
-
-    .contact-list li svg {
-      width: 20px;
-      height: 20px;
-      flex-shrink: 0;
-      margin-top: 3px;
-    }
-
-    .contact-list li .check-icon {
-      fill: #D4A017;
-    }
-
-    /* Cosa succede adesso */
-    .timeline-card .highlight-text {
-      font-size: 18px;
-      font-weight: 600;
-      color: #FFFFFF;
-      text-align: center;
-      margin-top: 8px;
-    }
-
-    .timeline-card .highlight-text span {
-      background: linear-gradient(90deg, #D4A017, #F5C518);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    /* Warning box */
-    .warning-box {
-      background: rgba(255,59,59,0.04);
-      border: 1px solid rgba(255,59,59,0.15);
-      border-radius: 16px;
-      padding: 24px 28px;
-      margin-bottom: 24px;
-      transition: border-color 0.3s ease;
-    }
-
-    .warning-box:hover {
-      border-color: rgba(255,59,59,0.25);
-    }
-
-    .warning-box .warning-icon {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 10px;
-    }
-
-    .warning-box .warning-icon svg {
-      width: 20px;
-      height: 20px;
-      fill: #FF5252;
-      flex-shrink: 0;
-    }
-
-    .warning-box .warning-icon span {
-      font-size: 14px;
-      font-weight: 700;
-      color: #FF5252;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .warning-box p {
-      color: rgba(255,255,255,0.7);
-      font-size: 16px;
-    }
-
-    .warning-box p strong {
-      color: #FFFFFF;
-    }
-
-    /* Per chi è */
-    .target-list {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      margin-top: 16px;
-    }
-
-    .target-list li {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      font-size: 17px;
-      color: rgba(255,255,255,0.8);
-    }
-
-    .target-list li svg {
-      width: 22px;
-      height: 22px;
-      flex-shrink: 0;
-    }
-
-    .target-list li .green-check {
-      fill: #4CAF50;
-    }
-
-    /* Gold card — esercizio */
-    .gold-card {
-      background: rgba(212,160,23,0.06);
-      border: 1px solid rgba(212,160,23,0.2);
-      border-radius: 20px;
-      padding: 32px;
-      margin-bottom: 24px;
-      transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
-    }
-
-    .gold-card:hover {
-      border-color: rgba(212,160,23,0.35);
-      box-shadow: 0 4px 24px rgba(212,160,23,0.1);
-      transform: translateY(-2px);
-    }
-
-    .gold-card .gold-card-title {
-      font-size: 18px;
-      font-weight: 700;
-      color: #F5C518;
-      margin-bottom: 16px;
-    }
-
-    .gold-card .exercise {
-      font-size: 20px;
-      font-weight: 600;
-      font-style: italic;
-      color: #FFFFFF;
-      line-height: 1.6;
-      margin-bottom: 16px;
-    }
-
-    .gold-card .exercise-sub {
-      font-size: 16px;
-      color: rgba(255,255,255,0.6);
-      font-style: italic;
-    }
-
-    .gold-card .exercise-note {
-      font-size: 15px;
-      color: rgba(255,255,255,0.5);
-      margin-top: 16px;
-    }
-
-    /* Footer warning */
-    .footer-warning {
-      text-align: center;
-      padding: 24px;
-      background: rgba(255,255,255,0.015);
-      border: 1px solid rgba(255,255,255,0.04);
-      border-radius: 16px;
-      margin-bottom: 32px;
-    }
-
-    .footer-warning p {
-      font-size: 14px;
-      color: rgba(255,255,255,0.4);
-    }
-
-    .footer-warning p strong {
-      color: rgba(255,255,255,0.6);
-    }
-
-    /* Closing */
-    .closing {
-      text-align: center;
-      padding-top: 16px;
-    }
-
-    .closing p {
-      font-size: 18px;
-      color: rgba(255,255,255,0.6);
-      line-height: 1.8;
-    }
-
-    .closing p strong {
-      color: #FFFFFF;
-    }
-
-    .closing .gold {
-      background: linear-gradient(90deg, #D4A017, #F5C518);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      font-weight: 700;
-    }
-
-    .section-divider {
-      height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
-      margin: 8px 0;
-    }
-
-    /* Fade-in */
-    .fade-in {
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.6s ease, transform 0.6s ease;
-    }
-    .fade-in.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    @media (max-width: 768px) {
-      .ty-section {
-        padding: 48px 20px 64px;
-      }
-
-      .ty-card {
-        padding: 24px;
-      }
-
-      .gold-card {
-        padding: 24px;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .ty-section {
-        padding: 32px 16px 48px;
-      }
-
-      .ty-title {
-        font-size: 22px;
-      }
-
-      .ty-card {
-        padding: 20px;
-        border-radius: 16px;
-      }
-
-      .gold-card {
-        padding: 20px;
-        border-radius: 16px;
-      }
-
-      .gold-card .exercise {
-        font-size: 17px;
-      }
-
-      .warning-box {
-        padding: 20px;
-      }
-    }
-  </style>
-
-<div class="widget-thankyou">
-
-  <!-- Sfondo Animato -->
-  <div class="animated-bg" id="animatedBg"></div>
-
-  <section class="ty-section">
+  <div data-ty-section style="position: relative; z-index: 1; max-width: 700px; margin: 0 auto; padding: 64px 32px 80px;">
 
     <!-- Header -->
-    <div class="ty-header fade-in">
-      <div class="ty-icon">
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M5.76 10l-1.8 1.8L10 17.84l12.04-12.04-1.8-1.8L10 14.24z"/></svg>
+    <div style="text-align: center; margin-bottom: 40px; animation: fadeInUp 0.6s ease forwards;">
+      <div style="width: 64px; height: 64px; margin: 0 auto 20px; background: rgba(212,160,23,0.1); border: 1px solid rgba(212,160,23,0.3); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+        <svg viewBox="0 0 24 24" style="width: 32px; height: 32px; fill: #F5C518;" xmlns="http://www.w3.org/2000/svg"><path d="M5.76 10l-1.8 1.8L10 17.84l12.04-12.04-1.8-1.8L10 14.24z"/></svg>
       </div>
-      <div class="ty-badge">Richiesta Inviata con Successo</div>
-      <h1 class="ty-title"><span class="check"></span> Il tuo accesso a "Sapere è Potere" è stato richiesto</h1>
+      <div style="display: inline-block; font-size: 13px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; background: linear-gradient(90deg, #D4A017, #F5C518); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 12px;">Richiesta Inviata con Successo</div>
+      <h1 data-ty-title style="font-family: 'Inter Tight', sans-serif; font-size: clamp(22px, 3.5vw, 32px); font-weight: 700; line-height: 1.2; color: #FFFFFF; margin: 0;">Il tuo accesso a "Sapere è Potere" è stato richiesto</h1>
     </div>
 
     <!-- Info card -->
-    <div class="ty-card info-card fade-in">
-      <p><strong style="color:#FFFFFF">Sapere è Potere</strong> non è disponibile pubblicamente.</p>
-      <p>La tua richiesta è stata inoltrata al nostro consulente.</p>
+    <div data-ty-card style="background: rgba(255,255,255,0.025); border: 1px solid rgba(255,255,255,0.06); border-radius: 20px; padding: 32px; margin-bottom: 24px; text-align: center; animation: fadeInUp 0.6s ease forwards; animation-delay: 0.08s; opacity: 0;">
+      <p style="color: rgba(255,255,255,0.7); margin: 0 0 8px 0; font-size: 16px;"><strong style="color:#FFFFFF">Sapere è Potere</strong> non è disponibile pubblicamente.</p>
+      <p style="color: rgba(255,255,255,0.7); margin: 0; font-size: 16px;">La tua richiesta è stata inoltrata al nostro consulente.</p>
     </div>
 
     <!-- Sarai contattato per -->
-    <div class="ty-card fade-in">
-      <div class="ty-card-title">Sarai contattato per:</div>
-      <ul class="contact-list">
-        <li>
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path class="check-icon" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+    <div data-ty-card style="background: rgba(255,255,255,0.025); border: 1px solid rgba(255,255,255,0.06); border-radius: 20px; padding: 32px; margin-bottom: 24px; animation: fadeInUp 0.6s ease forwards; animation-delay: 0.16s; opacity: 0;">
+      <div style="font-size: 18px; font-weight: 700; margin-bottom: 16px; color: #FFFFFF;">Sarai contattato per:</div>
+      <ul style="list-style: none; display: flex; flex-direction: column; gap: 12px; margin: 16px 0 0 0; padding: 0;">
+        <li style="display: flex; align-items: flex-start; gap: 12px; color: rgba(255,255,255,0.7); font-size: 16px;">
+          <svg viewBox="0 0 24 24" style="width: 20px; height: 20px; flex-shrink: 0; margin-top: 3px;" xmlns="http://www.w3.org/2000/svg"><path fill="#D4A017" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
           <span>Verificare che questo film sia adatto al tuo momento attuale</span>
         </li>
-        <li>
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path class="check-icon" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+        <li style="display: flex; align-items: flex-start; gap: 12px; color: rgba(255,255,255,0.7); font-size: 16px;">
+          <svg viewBox="0 0 24 24" style="width: 20px; height: 20px; flex-shrink: 0; margin-top: 3px;" xmlns="http://www.w3.org/2000/svg"><path fill="#D4A017" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
           <span>Capire i tuoi obiettivi</span>
         </li>
-        <li>
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path class="check-icon" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+        <li style="display: flex; align-items: flex-start; gap: 12px; color: rgba(255,255,255,0.7); font-size: 16px;">
+          <svg viewBox="0 0 24 24" style="width: 20px; height: 20px; flex-shrink: 0; margin-top: 3px;" xmlns="http://www.w3.org/2000/svg"><path fill="#D4A017" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
           <span>Sbloccare l'accesso gratuito</span>
         </li>
       </ul>
     </div>
 
     <!-- Cosa succede adesso -->
-    <div class="ty-card timeline-card fade-in">
-      <div class="ty-card-title">Cosa succede adesso?</div>
-      <p>Entro le prossime <strong style="color:#FFFFFF">24 ore</strong> potresti ricevere:</p>
-      <p class="highlight-text"><span>una chiamata</span> oppure <span>un messaggio WhatsApp</span></p>
+    <div data-ty-card style="background: rgba(255,255,255,0.025); border: 1px solid rgba(255,255,255,0.06); border-radius: 20px; padding: 32px; margin-bottom: 24px; animation: fadeInUp 0.6s ease forwards; animation-delay: 0.24s; opacity: 0;">
+      <div style="font-size: 18px; font-weight: 700; margin-bottom: 16px; color: #FFFFFF;">Cosa succede adesso?</div>
+      <p style="color: rgba(255,255,255,0.7); margin: 0 0 8px 0;">Entro le prossime <strong style="color:#FFFFFF">24 ore</strong> potresti ricevere:</p>
+      <p style="font-size: 18px; font-weight: 600; color: #FFFFFF; text-align: center; margin: 8px 0 0 0;"><span style="background: linear-gradient(90deg, #D4A017, #F5C518); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">una chiamata</span> oppure <span style="background: linear-gradient(90deg, #D4A017, #F5C518); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">un messaggio WhatsApp</span></p>
     </div>
 
     <!-- Warning box -->
-    <div class="warning-box fade-in">
-      <div class="warning-icon">
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
-        <span>Importante</span>
+    <div data-ty-warn style="background: rgba(255,59,59,0.04); border: 1px solid rgba(255,59,59,0.15); border-radius: 16px; padding: 24px 28px; margin-bottom: 24px; animation: fadeInUp 0.6s ease forwards; animation-delay: 0.32s; opacity: 0;">
+      <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
+        <svg viewBox="0 0 24 24" style="width: 20px; height: 20px; fill: #FF5252; flex-shrink: 0;" xmlns="http://www.w3.org/2000/svg"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+        <span style="font-size: 14px; font-weight: 700; color: #FF5252; text-transform: uppercase; letter-spacing: 0.5px;">Importante</span>
       </div>
-      <p><strong>Rispondi. Anche se è un numero che non conosci.</strong></p>
-      <p>Molti perdono l'opportunità semplicemente perché non rispondono.</p>
+      <p style="color: rgba(255,255,255,0.7); font-size: 16px; margin: 0 0 8px 0;"><strong style="color: #FFFFFF;">Rispondi. Anche se è un numero che non conosci.</strong></p>
+      <p style="color: rgba(255,255,255,0.7); font-size: 16px; margin: 0;">Molti perdono l'opportunità semplicemente perché non rispondono.</p>
     </div>
 
     <!-- Per chi è -->
-    <div class="ty-card fade-in">
-      <div class="ty-card-title">Questo film non è per tutti</div>
-      <p style="color:rgba(255,255,255,0.6)">È per chi:</p>
-      <ul class="target-list">
-        <li>
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path class="green-check" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+    <div data-ty-card style="background: rgba(255,255,255,0.025); border: 1px solid rgba(255,255,255,0.06); border-radius: 20px; padding: 32px; margin-bottom: 24px; animation: fadeInUp 0.6s ease forwards; animation-delay: 0.4s; opacity: 0;">
+      <div style="font-size: 18px; font-weight: 700; margin-bottom: 16px; color: #FFFFFF;">Questo film non è per tutti</div>
+      <p style="color: rgba(255,255,255,0.6); margin: 0 0 8px 0;">È per chi:</p>
+      <ul style="list-style: none; display: flex; flex-direction: column; gap: 14px; margin: 16px 0 0 0; padding: 0;">
+        <li style="display: flex; align-items: center; gap: 14px; font-size: 17px; color: rgba(255,255,255,0.8);">
+          <svg viewBox="0 0 24 24" style="width: 22px; height: 22px; flex-shrink: 0;" xmlns="http://www.w3.org/2000/svg"><path fill="#4CAF50" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
           <span>Parte da zero</span>
         </li>
-        <li>
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path class="green-check" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+        <li style="display: flex; align-items: center; gap: 14px; font-size: 17px; color: rgba(255,255,255,0.8);">
+          <svg viewBox="0 0 24 24" style="width: 22px; height: 22px; flex-shrink: 0;" xmlns="http://www.w3.org/2000/svg"><path fill="#4CAF50" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
           <span>Vuole crescere davvero</span>
         </li>
-        <li>
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path class="green-check" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+        <li style="display: flex; align-items: center; gap: 14px; font-size: 17px; color: rgba(255,255,255,0.8);">
+          <svg viewBox="0 0 24 24" style="width: 22px; height: 22px; flex-shrink: 0;" xmlns="http://www.w3.org/2000/svg"><path fill="#4CAF50" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
           <span>È pronto a mettersi in discussione</span>
         </li>
       </ul>
     </div>
 
     <!-- Esercizio — Gold card -->
-    <div class="gold-card fade-in">
-      <div class="gold-card-title">Nel frattempo fai questo</div>
-      <p class="exercise">Scrivi su un foglio:<br>"Dove voglio essere tra 3 anni?"</p>
-      <p class="exercise-sub">E cosa mi sta impedendo di arrivarci?</p>
-      <p class="exercise-note">Se non hai chiarezza ora, sarà difficile crearla dopo.</p>
+    <div data-ty-gold style="background: rgba(212,160,23,0.06); border: 1px solid rgba(212,160,23,0.2); border-radius: 20px; padding: 32px; margin-bottom: 24px; animation: fadeInUp 0.6s ease forwards; animation-delay: 0.48s; opacity: 0;">
+      <div style="font-size: 18px; font-weight: 700; color: #F5C518; margin-bottom: 16px;">Nel frattempo fai questo</div>
+      <p data-ty-exercise style="font-size: 20px; font-weight: 600; font-style: italic; color: #FFFFFF; line-height: 1.6; margin: 0 0 16px 0;">Scrivi su un foglio:<br>"Dove voglio essere tra 3 anni?"</p>
+      <p style="font-size: 16px; color: rgba(255,255,255,0.6); font-style: italic; margin: 0 0 16px 0;">E cosa mi sta impedendo di arrivarci?</p>
+      <p style="font-size: 15px; color: rgba(255,255,255,0.5); margin: 0;">Se non hai chiarezza ora, sarà difficile crearla dopo.</p>
     </div>
 
     <!-- Footer warning -->
-    <div class="footer-warning fade-in">
-      <p>Se non rispondi alla chiamata o al messaggio,<br><strong>la richiesta verrà automaticamente annullata.</strong></p>
+    <div style="text-align: center; padding: 24px; background: rgba(255,255,255,0.015); border: 1px solid rgba(255,255,255,0.04); border-radius: 16px; margin-bottom: 32px; animation: fadeInUp 0.6s ease forwards; animation-delay: 0.56s; opacity: 0;">
+      <p style="font-size: 14px; color: rgba(255,255,255,0.4); margin: 0;">Se non rispondi alla chiamata o al messaggio,<br><strong style="color: rgba(255,255,255,0.6);">la richiesta verrà automaticamente annullata.</strong></p>
     </div>
 
     <!-- Closing -->
-    <div class="closing fade-in">
-      <p>Ci sentiamo presto.<br><strong>Preparati.</strong></p>
-      <p style="margin-top:12px">Perché se sei davvero pronto,<br><span class="gold">questo potrebbe essere l'inizio di qualcosa di grande.</span></p>
+    <div style="text-align: center; padding-top: 16px; animation: fadeInUp 0.6s ease forwards; animation-delay: 0.64s; opacity: 0;">
+      <p style="font-size: 18px; color: rgba(255,255,255,0.6); line-height: 1.8; margin: 0;">Ci sentiamo presto.<br><strong style="color: #FFFFFF;">Preparati.</strong></p>
+      <p style="font-size: 18px; color: rgba(255,255,255,0.6); line-height: 1.8; margin: 12px 0 0 0;">Perché se sei davvero pronto,<br><span style="background: linear-gradient(90deg, #D4A017, #F5C518); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-weight: 700;">questo potrebbe essere l'inizio di qualcosa di grande.</span></p>
     </div>
 
-  </section>
-
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      var observer = new IntersectionObserver(function(entries) {
-        entries.forEach(function(entry) {
-          if (entry.isIntersecting) { entry.target.classList.add('visible'); }
-        });
-      }, { threshold: 0.1 });
-      var els = document.querySelectorAll('.fade-in');
-      els.forEach(function(el, i) {
-        el.style.transitionDelay = (i * 0.08) + 's';
-        observer.observe(el);
-      });
-    });
-  </script>
+  </div>
 
   <!-- Sfondo Animato WebGL -->
   <script>
     (function() {
       var vShader = 'attribute vec2 position;varying vec2 vUv;void main(){vUv=position*0.5+0.5;gl_Position=vec4(position,0.0,1.0);}';
-
-      var fShader = [
-        'precision highp float;',
-        'uniform float uTime;',
-        'uniform vec2 uResolution;',
-        'varying vec2 vUv;',
-        'void main(){',
-        '  float mr=min(uResolution.x,uResolution.y);',
-        '  vec2 uv=(vUv*2.0-1.0)*uResolution/mr;',
-        '  float d=-uTime*0.5;',
-        '  float a=0.0;',
-        '  for(float i=0.0;i<8.0;++i){',
-        '    a+=cos(i-d-a*uv.x);',
-        '    d+=sin(uv.y*i+a);',
-        '  }',
-        '  d+=uTime*0.5;',
-        '  float p1=cos(uv.x*d)*0.5+0.5;',
-        '  float p2=cos(uv.y*a)*0.5+0.5;',
-        '  vec3 base=vec3(0.039,0.039,0.102);',
-        '  vec3 accent1=vec3(0.059,0.059,0.141);',
-        '  vec3 accent2=vec3(0.831,0.627,0.090);',
-        '  vec3 col=base + (accent1-base)*(p1*0.6) + accent2*(p2*0.03);',
-        '  gl_FragColor=vec4(col,1.0);',
-        '}'
-      ].join('\n');
-
+      var fShader = ['precision highp float;','uniform float uTime;','uniform vec2 uResolution;','varying vec2 vUv;','void main(){','  float mr=min(uResolution.x,uResolution.y);','  vec2 uv=(vUv*2.0-1.0)*uResolution/mr;','  float d=-uTime*0.5;','  float a=0.0;','  for(float i=0.0;i<8.0;++i){','    a+=cos(i-d-a*uv.x);','    d+=sin(uv.y*i+a);','  }','  d+=uTime*0.5;','  float p1=cos(uv.x*d)*0.5+0.5;','  float p2=cos(uv.y*a)*0.5+0.5;','  vec3 base=vec3(0.039,0.039,0.102);','  vec3 accent1=vec3(0.059,0.059,0.141);','  vec3 accent2=vec3(0.831,0.627,0.090);','  vec3 col=base + (accent1-base)*(p1*0.6) + accent2*(p2*0.03);','  gl_FragColor=vec4(col,1.0);','}'].join('\n');
       function initBg() {
         var container = document.getElementById('animatedBg');
         if (!container) return;
-
-        if (window.innerWidth < 768) {
-          container.style.background = '#0A0A1A';
-          return;
-        }
-
+        if (window.innerWidth < 768) { container.style.background = '#0A0A1A'; return; }
         var canvas = document.createElement('canvas');
         canvas.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none';
         container.appendChild(canvas);
-
         var gl = canvas.getContext('webgl');
-        if (!gl) {
-          container.style.background = '#0A0A1A';
-          return;
-        }
-
-        function createShader(type, source) {
-          var shader = gl.createShader(type);
-          gl.shaderSource(shader, source);
-          gl.compileShader(shader);
-          return shader;
-        }
-
+        if (!gl) { container.style.background = '#0A0A1A'; return; }
+        function createShader(type, source) { var s = gl.createShader(type); gl.shaderSource(s, source); gl.compileShader(s); return s; }
         var program = gl.createProgram();
         gl.attachShader(program, createShader(gl.VERTEX_SHADER, vShader));
         gl.attachShader(program, createShader(gl.FRAGMENT_SHADER, fShader));
-        gl.linkProgram(program);
-        gl.useProgram(program);
-
+        gl.linkProgram(program); gl.useProgram(program);
         var vertices = new Float32Array([-1,-1,1,-1,-1,1,-1,1,1,-1,1,1]);
-        var buffer = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-        gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
-
-        var pos = gl.getAttribLocation(program, 'position');
-        gl.enableVertexAttribArray(pos);
-        gl.vertexAttribPointer(pos, 2, gl.FLOAT, false, 0, 0);
-
-        var uTime = gl.getUniformLocation(program, 'uTime');
-        var uRes = gl.getUniformLocation(program, 'uResolution');
-
-        function resize() {
-          var dpr = Math.min(window.devicePixelRatio || 1, 2);
-          canvas.width = container.offsetWidth * dpr;
-          canvas.height = container.offsetHeight * dpr;
-          gl.viewport(0, 0, canvas.width, canvas.height);
-          gl.uniform2f(uRes, canvas.width, canvas.height);
-        }
-
-        window.addEventListener('resize', resize);
-        resize();
-
-        function animate(t) {
-          gl.uniform1f(uTime, t * 0.001);
-          gl.drawArrays(gl.TRIANGLES, 0, 6);
-          requestAnimationFrame(animate);
-        }
+        var buffer = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buffer); gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
+        var pos = gl.getAttribLocation(program, 'position'); gl.enableVertexAttribArray(pos); gl.vertexAttribPointer(pos, 2, gl.FLOAT, false, 0, 0);
+        var uTime = gl.getUniformLocation(program, 'uTime'), uRes = gl.getUniformLocation(program, 'uResolution');
+        function resize() { var dpr = Math.min(window.devicePixelRatio || 1, 2); canvas.width = container.offsetWidth * dpr; canvas.height = container.offsetHeight * dpr; gl.viewport(0, 0, canvas.width, canvas.height); gl.uniform2f(uRes, canvas.width, canvas.height); }
+        window.addEventListener('resize', resize); resize();
+        function animate(t) { gl.uniform1f(uTime, t * 0.001); gl.drawArrays(gl.TRIANGLES, 0, 6); requestAnimationFrame(animate); }
         animate(0);
       }
-
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initBg);
-      } else {
-        setTimeout(initBg, 100);
-      }
+      if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initBg); } else { setTimeout(initBg, 100); }
     })();
   </script>
 
