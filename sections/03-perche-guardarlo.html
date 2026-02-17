@@ -1,0 +1,594 @@
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,400;0,600;0,700;1,400&display=swap');
+
+    .widget-perche, .widget-perche *, .widget-perche *::before, .widget-perche *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    .widget-perche {
+      font-family: 'Inter Tight', sans-serif;
+      font-weight: 400;
+      font-size: 17px;
+      line-height: 1.7;
+      background: #0A0A1A; /* Fallback senza WebGL */
+      color: #FFFFFF;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Sfondo Animato WebGL */
+    .animated-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .animated-bg canvas {
+      pointer-events: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .perche-section {
+      position: relative;
+      z-index: 1;
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 80px 32px;
+      text-align: center;
+    }
+
+    .perche-title {
+      font-size: clamp(28px, 4vw, 42px);
+      font-weight: 700;
+      font-style: italic;
+      line-height: 1.1;
+      margin-bottom: 40px;
+      color: #FFFFFF;
+    }
+
+    .perche-intro {
+      font-size: 18px;
+      color: rgba(255,255,255,0.7);
+      margin-bottom: 24px;
+      line-height: 1.7;
+    }
+
+    .pain-block {
+      background: rgba(255,59,59,0.04);
+      border: 1px solid rgba(255,59,59,0.12);
+      border-radius: 12px;
+      padding: 16px 24px;
+      margin-bottom: 16px;
+      text-align: left;
+      transition: background 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+    }
+
+    .pain-block:hover {
+      background: rgba(255,59,59,0.07);
+      border-color: rgba(255,59,59,0.2);
+      transform: translateY(-2px);
+    }
+
+    .pain-block p {
+      font-size: 17px;
+      color: rgba(255,255,255,0.75);
+      line-height: 1.7;
+    }
+
+    .perche-body {
+      font-size: 18px;
+      color: rgba(255,255,255,0.7);
+      margin-top: 28px;
+      margin-bottom: 12px;
+      line-height: 1.8;
+    }
+
+    .perche-body .dim {
+      color: rgba(255,255,255,0.5);
+    }
+
+    .gold-highlight {
+      font-weight: 700;
+      background: linear-gradient(90deg, #D4A017, #F5C518);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .cta-block {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      margin-top: 48px;
+      margin-bottom: 40px;
+    }
+
+    .cta-btn {
+      display: inline-block;
+      background: linear-gradient(135deg, #D4A017, #F5C518);
+      color: #0A0A1A;
+      font-family: 'Inter Tight', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      padding: 18px 44px;
+      border-radius: 14px;
+      text-decoration: none;
+      box-shadow: 0 4px 20px rgba(212,160,23,0.3);
+      transition: transform 0.2s, box-shadow 0.2s;
+      animation: ctaPulse 3s ease-in-out infinite;
+      cursor: pointer;
+      border: none;
+    }
+
+    .cta-btn:hover {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 8px 32px rgba(212,160,23,0.45);
+    }
+
+    @keyframes ctaPulse {
+      0%, 100% { box-shadow: 0 4px 20px rgba(212,160,23,0.3); }
+      50% { box-shadow: 0 4px 28px rgba(212,160,23,0.5); }
+    }
+
+    .cta-sub {
+      margin-top: 14px;
+      font-size: 13px;
+      color: rgba(255,255,255,0.5);
+    }
+
+    .cta-sub strong {
+      background: linear-gradient(90deg, #D4A017, #F5C518);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .cta-image {
+      max-width: 620px;
+      width: 100%;
+      border-radius: 24px;
+      box-shadow: 0 12px 60px rgba(0,0,0,0.5);
+      margin-top: 32px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .cta-image:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 60px rgba(212,160,23,0.12);
+    }
+
+    .section-divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+    }
+
+    /* Popup Modal */
+    .form-modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.75);
+      z-index: 10000;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .form-modal-overlay.active {
+      display: flex;
+    }
+
+    .form-modal {
+      position: relative;
+      background: #0F0F24;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 20px;
+      padding: 40px 32px 32px;
+      max-width: 520px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.6);
+    }
+
+    .form-modal-close {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 36px;
+      height: 36px;
+      border: none;
+      background: rgba(255,255,255,0.06);
+      border-radius: 50%;
+      color: rgba(255,255,255,0.6);
+      font-size: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .form-modal-close:hover {
+      background: rgba(255,255,255,0.12);
+      color: #FFFFFF;
+    }
+
+    .form-modal-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #FFFFFF;
+      text-align: center;
+      margin-bottom: 24px;
+      line-height: 1.4;
+    }
+
+    .form-modal-title span {
+      background: linear-gradient(90deg, #D4A017, #F5C518);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    #hubspotFormContainer {
+      min-height: 100px;
+    }
+
+    /* HubSpot Form Overrides per sfondo scuro */
+    #hubspotFormContainer label {
+      color: rgba(255,255,255,0.85) !important;
+      font-size: 14px !important;
+    }
+
+    #hubspotFormContainer .hs-input {
+      background: rgba(255,255,255,0.08) !important;
+      border: 1px solid rgba(255,255,255,0.15) !important;
+      color: #FFFFFF !important;
+      border-radius: 10px !important;
+      padding: 12px 14px !important;
+      font-size: 15px !important;
+      font-family: 'Inter Tight', sans-serif !important;
+      width: 100% !important;
+    }
+
+    #hubspotFormContainer .hs-input:focus {
+      border-color: rgba(212,160,23,0.5) !important;
+      outline: none !important;
+      box-shadow: 0 0 0 2px rgba(212,160,23,0.15) !important;
+    }
+
+    #hubspotFormContainer .hs-input::placeholder {
+      color: rgba(255,255,255,0.35) !important;
+    }
+
+    #hubspotFormContainer select.hs-input {
+      appearance: auto !important;
+      -webkit-appearance: auto !important;
+    }
+
+    #hubspotFormContainer .hs-submit .hs-button {
+      background: linear-gradient(135deg, #D4A017, #F5C518) !important;
+      color: #0A0A1A !important;
+      font-family: 'Inter Tight', sans-serif !important;
+      font-size: 16px !important;
+      font-weight: 700 !important;
+      padding: 14px 32px !important;
+      border: none !important;
+      border-radius: 12px !important;
+      cursor: pointer !important;
+      width: 100% !important;
+      transition: transform 0.2s, box-shadow 0.2s !important;
+    }
+
+    #hubspotFormContainer .hs-submit .hs-button:hover {
+      transform: translateY(-1px) !important;
+      box-shadow: 0 6px 24px rgba(212,160,23,0.4) !important;
+    }
+
+    #hubspotFormContainer .hs-error-msgs {
+      color: #FF5252 !important;
+      font-size: 13px !important;
+      margin-top: 4px !important;
+    }
+
+    #hubspotFormContainer .hs-error-msgs li label {
+      color: #FF5252 !important;
+    }
+
+    #hubspotFormContainer .hs-form-field {
+      margin-bottom: 18px !important;
+    }
+
+    #hubspotFormContainer .legal-consent-container,
+    #hubspotFormContainer .legal-consent-container p,
+    #hubspotFormContainer .legal-consent-container span {
+      color: rgba(255,255,255,0.5) !important;
+      font-size: 12px !important;
+    }
+
+    #hubspotFormContainer a {
+      color: #F5C518 !important;
+    }
+
+    #hubspotFormContainer .submitted-message {
+      color: #FFFFFF !important;
+      font-size: 16px !important;
+      text-align: center !important;
+    }
+
+    @media (max-width: 480px) {
+      .form-modal {
+        padding: 36px 20px 24px;
+        border-radius: 16px;
+      }
+
+      .form-modal-title {
+        font-size: 18px;
+      }
+    }
+
+    /* Fade-in */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 768px) {
+      .perche-section {
+        padding: 60px 20px;
+      }
+
+      .pain-block {
+        padding: 14px 18px;
+      }
+
+      .cta-image {
+        max-width: 100%;
+        border-radius: 20px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .perche-section {
+        padding: 48px 16px;
+      }
+
+      .perche-title {
+        font-size: 26px;
+      }
+
+      .perche-intro {
+        font-size: 16px;
+      }
+
+      .pain-block p {
+        font-size: 15px;
+      }
+
+      .cta-btn {
+        font-size: 16px;
+        padding: 16px 32px;
+      }
+    }
+  </style>
+
+<div class="widget-perche">
+
+  <!-- Sfondo Animato -->
+  <div class="animated-bg" id="animatedBg"></div>
+
+  <section class="perche-section">
+    <h2 class="perche-title fade-in">"Perché dovrei guardarlo?"</h2>
+
+    <p class="perche-intro fade-in">Perché se oggi ti senti:</p>
+
+    <div class="pain-block fade-in">
+      <p>Bloccato, senza direzione, con ambizioni più grandi delle tue possibilità…</p>
+    </div>
+
+    <div class="pain-block fade-in">
+      <p>Stanco di fare lo spettatore della felicità altrui…</p>
+    </div>
+
+    <div class="perche-body fade-in">
+      <p>Beh allora, questo film potrebbe cambiare il tuo modo di vivere per sempre.</p>
+    </div>
+
+    <div class="perche-body fade-in">
+      <p class="dim">Non perché ti motiva.</p>
+      <p><span class="gold-highlight">Ma perché ti fa vedere cosa è possibile.</span></p>
+    </div>
+
+    <div class="cta-block fade-in">
+      <a href="javascript:void(0)" onclick="openFormModal()" class="cta-btn">Sblocca Gratis "Sapere è Potere"</a>
+      <div class="cta-sub">
+        <strong>67 Visioni Gratuite Rimaste</strong>
+      </div>
+    </div>
+
+    <img src="../images/film-optin.png" alt="Sblocca Gratis il Film — Sapere è Potere" class="cta-image fade-in">
+  </section>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) { entry.target.classList.add('visible'); }
+        });
+      }, { threshold: 0.1 });
+      var els = document.querySelectorAll('.fade-in');
+      els.forEach(function(el, i) {
+        el.style.transitionDelay = (i * 0.08) + 's';
+        observer.observe(el);
+      });
+    });
+  </script>
+
+  <!-- Popup Modal HubSpot -->
+  <div class="form-modal-overlay" id="formModalOverlay">
+    <div class="form-modal">
+      <button class="form-modal-close" onclick="closeFormModal()">&times;</button>
+      <div class="form-modal-title">Compila il modulo per sbloccare <span>gratis</span> il Film</div>
+      <div id="hubspotFormContainer"></div>
+    </div>
+  </div>
+
+  <script charset="utf-8" type="text/javascript" src="https://js-eu1.hsforms.net/forms/embed/v2.js"></script>
+  <script>
+    var hsFormLoaded = false;
+    function openFormModal() {
+      document.getElementById('formModalOverlay').classList.add('active');
+      document.body.style.overflow = 'hidden';
+      if (!hsFormLoaded && typeof hbspt !== 'undefined') {
+        hbspt.forms.create({
+          portalId: "140603915",
+          formId: "09823da4-443d-47e0-8ed5-2e0ba9fc68f9",
+          region: "eu1",
+          target: "#hubspotFormContainer"
+        });
+        hsFormLoaded = true;
+      } else if (!hsFormLoaded) {
+        var checkHs = setInterval(function() {
+          if (typeof hbspt !== 'undefined') {
+            clearInterval(checkHs);
+            hbspt.forms.create({
+              portalId: "140603915",
+              formId: "09823da4-443d-47e0-8ed5-2e0ba9fc68f9",
+              region: "eu1",
+              target: "#hubspotFormContainer"
+            });
+            hsFormLoaded = true;
+          }
+        }, 200);
+      }
+    }
+    function closeFormModal() {
+      document.getElementById('formModalOverlay').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+    document.getElementById('formModalOverlay').addEventListener('click', function(e) {
+      if (e.target === this) closeFormModal();
+    });
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeFormModal();
+    });
+  </script>
+
+  <!-- Sfondo Animato WebGL -->
+  <script>
+    (function() {
+      var vShader = 'attribute vec2 position;varying vec2 vUv;void main(){vUv=position*0.5+0.5;gl_Position=vec4(position,0.0,1.0);}';
+
+      var fShader = [
+        'precision highp float;',
+        'uniform float uTime;',
+        'uniform vec2 uResolution;',
+        'varying vec2 vUv;',
+        'void main(){',
+        '  float mr=min(uResolution.x,uResolution.y);',
+        '  vec2 uv=(vUv*2.0-1.0)*uResolution/mr;',
+        '  float d=-uTime*0.5;',
+        '  float a=0.0;',
+        '  for(float i=0.0;i<8.0;++i){',
+        '    a+=cos(i-d-a*uv.x);',
+        '    d+=sin(uv.y*i+a);',
+        '  }',
+        '  d+=uTime*0.5;',
+        '  float p1=cos(uv.x*d)*0.5+0.5;',
+        '  float p2=cos(uv.y*a)*0.5+0.5;',
+        '  vec3 base=vec3(0.039,0.039,0.102);',
+        '  vec3 accent1=vec3(0.059,0.059,0.141);',
+        '  vec3 accent2=vec3(0.831,0.627,0.090);',
+        '  vec3 col=base + (accent1-base)*(p1*0.6) + accent2*(p2*0.03);',
+        '  gl_FragColor=vec4(col,1.0);',
+        '}'
+      ].join('\n');
+
+      function initBg() {
+        var container = document.getElementById('animatedBg');
+        if (!container) return;
+
+        if (window.innerWidth < 768) {
+          container.style.background = '#0A0A1A';
+          return;
+        }
+
+        var canvas = document.createElement('canvas');
+        canvas.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none';
+        container.appendChild(canvas);
+
+        var gl = canvas.getContext('webgl');
+        if (!gl) {
+          container.style.background = '#0A0A1A';
+          return;
+        }
+
+        function createShader(type, source) {
+          var shader = gl.createShader(type);
+          gl.shaderSource(shader, source);
+          gl.compileShader(shader);
+          return shader;
+        }
+
+        var program = gl.createProgram();
+        gl.attachShader(program, createShader(gl.VERTEX_SHADER, vShader));
+        gl.attachShader(program, createShader(gl.FRAGMENT_SHADER, fShader));
+        gl.linkProgram(program);
+        gl.useProgram(program);
+
+        var vertices = new Float32Array([-1,-1,1,-1,-1,1,-1,1,1,-1,1,1]);
+        var buffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+        gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
+
+        var pos = gl.getAttribLocation(program, 'position');
+        gl.enableVertexAttribArray(pos);
+        gl.vertexAttribPointer(pos, 2, gl.FLOAT, false, 0, 0);
+
+        var uTime = gl.getUniformLocation(program, 'uTime');
+        var uRes = gl.getUniformLocation(program, 'uResolution');
+
+        function resize() {
+          var dpr = Math.min(window.devicePixelRatio || 1, 2);
+          canvas.width = container.offsetWidth * dpr;
+          canvas.height = container.offsetHeight * dpr;
+          gl.viewport(0, 0, canvas.width, canvas.height);
+          gl.uniform2f(uRes, canvas.width, canvas.height);
+        }
+
+        window.addEventListener('resize', resize);
+        resize();
+
+        function animate(t) {
+          gl.uniform1f(uTime, t * 0.001);
+          gl.drawArrays(gl.TRIANGLES, 0, 6);
+          requestAnimationFrame(animate);
+        }
+        animate(0);
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initBg);
+      } else {
+        setTimeout(initBg, 100);
+      }
+    })();
+  </script>
+
+</div>
